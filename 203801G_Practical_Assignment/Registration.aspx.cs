@@ -93,7 +93,7 @@ namespace _203801G_Practical_Assignment
                             cmd.Parameters.AddWithValue("@IV", Convert.ToBase64String(IV));
                             cmd.Parameters.AddWithValue("@Key", Convert.ToBase64String(Key));
                             cmd.Parameters.AddWithValue("@LoginAttempt", 0);
-                            cmd.Parameters.AddWithValue("AccountStatus", "active");
+                            cmd.Parameters.AddWithValue("AccountStatus", "Active");
                             cmd.Connection = con;
                             try
                             {
