@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -62,6 +63,7 @@ namespace _203801G_Practical_Assignment
                                         SqlCommand commandsuccess = new SqlCommand(sqlsuccess, connection);
                                         commandsuccess.Parameters.AddWithValue("@Email", email);
                                         int updated = commandsuccess.ExecuteNonQuery();
+                                        createLog();
                                         Session["LoggedIn"] = email;
                                         string guid = Guid.NewGuid().ToString();
                                         Session["AuthToken"] = guid;
@@ -272,6 +274,46 @@ namespace _203801G_Practical_Assignment
             catch (WebException ex)
             {
                 throw ex;
+            }
+        }
+
+        protected void createLog()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("INSERT INTO AuditLog VALUES(@UserEmail, @DateTime, @Action)"))
+                    {
+                        using (SqlDataAdapter sda = new SqlDataAdapter())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Parameters.AddWithValue("@UserEmail", tb_userid.Text.Trim());
+                            cmd.Parameters.AddWithValue("@DateTime", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@Action", "User Login Account");
+                            cmd.Connection = con;
+                            try
+                            {
+                                con.Open();
+                                cmd.ExecuteNonQuery();
+                                //con.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                //throw new Exception(ex.ToString());
+                            }
+                            finally
+                            {
+                                con.Close();
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
             }
         }
     }

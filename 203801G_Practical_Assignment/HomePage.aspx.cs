@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace _203801G_Practical_Assignment
                 {
                     email = Session["LoggedIn"].ToString();
                     displayUserProfile(email);
+                    
                 }
             }
             else
@@ -58,6 +60,8 @@ namespace _203801G_Practical_Assignment
                 Response.Cookies["AuthToken"].Value = string.Empty;
                 Response.Cookies["AuthToken"].Expires = DateTime.Now.AddMonths(-20);
             }
+
+            createLog();
         }
 
         protected string decryptData(byte[] cipherText)
@@ -169,6 +173,46 @@ namespace _203801G_Practical_Assignment
             finally
             {
                 connection.Close();
+            }
+        }
+
+        protected void createLog()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("INSERT INTO AuditLog VALUES(@UserEmail, @DateTime, @Action)"))
+                    {
+                        using (SqlDataAdapter sda = new SqlDataAdapter())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Parameters.AddWithValue("@UserEmail", lbl_email.Text.Trim());
+                            cmd.Parameters.AddWithValue("@DateTime", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@Action", "User Logout of Account");
+                            cmd.Connection = con;
+                            try
+                            {
+                                con.Open();
+                                cmd.ExecuteNonQuery();
+                                //con.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                //throw new Exception(ex.ToString());
+                            }
+                            finally
+                            {
+                                con.Close();
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
             }
         }
     }

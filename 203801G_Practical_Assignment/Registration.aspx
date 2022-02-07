@@ -134,7 +134,7 @@
                     </tr>
                     <tr>
                         <td class="auto-style1">
-                            <asp:Label ID="lbl_pwd" runat="server" Text="Password" ValidationGroup="Val"></asp:Label>
+                            <asp:Label ID="lbl_pwd" Text="Password" runat="server" ValidationGroup="Val"></asp:Label>
                         </td>
                         <td class="auto-style1">
                             <asp:TextBox ID="tb_pwd" runat="server" Height="32px" Width="280px" TextMode="Password" onkeyup="javascript:validate()"></asp:TextBox>

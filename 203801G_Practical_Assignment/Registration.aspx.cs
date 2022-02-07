@@ -61,6 +61,7 @@ namespace _203801G_Practical_Assignment
             IV = cipher.IV;
 
             createAccount();
+            createLog();
             if(lb_error1.Text == "")
             {
                 Response.Redirect("Login.aspx", false);
@@ -104,7 +105,7 @@ namespace _203801G_Practical_Assignment
                             catch (Exception ex)
                             {
                                 //throw new Exception(ex.ToString());
-                                lb_error1.Text = "Email already Exist";
+                                lb_error1.Text = "Email already exist";
                             }
                             finally
                             {
@@ -184,5 +185,46 @@ namespace _203801G_Practical_Assignment
                 throw ex;
             }
         }
+
+        protected void createLog()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("INSERT INTO AuditLog VALUES(@UserEmail, @DateTime, @Action)"))
+                    {
+                        using (SqlDataAdapter sda = new SqlDataAdapter())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Parameters.AddWithValue("@UserEmail", tb_Email.Text.Trim());
+                            cmd.Parameters.AddWithValue("@DateTime", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@Action", "User registered account");
+                            cmd.Connection = con;
+                            try
+                            {
+                                con.Open();
+                                cmd.ExecuteNonQuery();
+                                //con.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                //throw new Exception(ex.ToString());
+                            }
+                            finally
+                            {
+                                con.Close();
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
     }
 }
