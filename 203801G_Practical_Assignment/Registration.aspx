@@ -139,7 +139,7 @@
                         <td class="auto-style1">
                             <asp:TextBox ID="tb_pwd" runat="server" Height="32px" Width="280px" TextMode="Password" onkeyup="javascript:validate()"></asp:TextBox>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidatorpwd" runat="server" ErrorMessage="Password Required" ControlToValidate="tb_pwd" ValidationGroup="Val" ForeColor="Red"></asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="Password must be at least 12 characters, contains at least one digit, lowercase, uppercase and special character" ValidationExpression="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$" ControlToValidate="tb_pwd" ForeColor="Red" ValidationGroup="Val"></asp:RegularExpressionValidator>
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="Password must be at least 12 characters, contains at least one digit, lowercase, uppercase and special character" ValidationExpression="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" ControlToValidate="tb_pwd" ForeColor="Red" ValidationGroup="Val"></asp:RegularExpressionValidator>
                             <br />
                             <asp:Label ID="lbl_pwdcheck" runat="server"></asp:Label>
                         </td>
